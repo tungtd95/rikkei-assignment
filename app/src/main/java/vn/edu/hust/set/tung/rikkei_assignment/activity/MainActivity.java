@@ -20,8 +20,9 @@ import vn.edu.hust.set.tung.rikkei_assignment.db.DBC;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int GRID_SIZE = 3;
-    public static final int GRID_SPACE = 10;
+    public static final int KEY_GRID_SIZE = 3;
+    public static final int KEY_GRID_SPACE = 10;
+    public static final int KEY_NEW_NOTE = 123123;
 
     DBC dbc;
     RecyclerView rvUsers;
@@ -38,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
         dbc = DBC.getInstance(this);
         noteAdapter = new NoteAdapter(dbc.getListNote());
-        gridManager = new GridLayoutManager(this, GRID_SIZE, LinearLayoutManager.VERTICAL, false);
-        gridDecorator = new ItemDecorationAlbumColumns(GRID_SPACE, GRID_SIZE);
+        gridManager = new GridLayoutManager(this, KEY_GRID_SIZE, LinearLayoutManager.VERTICAL, false);
+        gridDecorator = new ItemDecorationAlbumColumns(KEY_GRID_SPACE, KEY_GRID_SIZE);
 
         rvUsers.setAdapter(noteAdapter);
         rvUsers.setLayoutManager(gridManager);
@@ -72,10 +73,18 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.itemAdd:
                 Intent intent = new Intent(this, NewNoteActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, KEY_NEW_NOTE);
                 return true;
             default:
                 return true;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == KEY_NEW_NOTE && requestCode == RESULT_OK) {
+            noteAdapter.setListNote(dbc.getListNote());
+            noteAdapter.notifyDataSetChanged();
         }
     }
 }

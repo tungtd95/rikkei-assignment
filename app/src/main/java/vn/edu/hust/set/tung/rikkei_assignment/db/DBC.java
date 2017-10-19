@@ -35,11 +35,20 @@ public class DBC {
 
     public ArrayList<Note> getListNote() {
         ArrayList<Note> list = new ArrayList<>();
+        Cursor cursor = dbRead.rawQuery("select * from " + Util.DB_TABLE_NOTE, null);
+        while (cursor.moveToFirst()) {
+            String name = cursor.getString(cursor.getColumnIndex(Util.DB_NOTE_NAME));
+            String content = cursor.getString(cursor.getColumnIndex(Util.DB_NOTE_CONTENT));
+            list.add(new Note(name, content));
+        }
         return list;
     }
 
     public long addNote(Note note) {
-        return 0;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(Util.DB_NOTE_NAME, note.getName());
+        contentValues.put(Util.DB_NOTE_CONTENT, note.getContent());
+        return dbWrite.insert(Util.DB_TABLE_NOTE, null, contentValues);
     }
 
     public void removeNote(int userID) {
