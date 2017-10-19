@@ -13,7 +13,6 @@ public class Note {
     private String time;
     private ArrayList<String> listImage;
     boolean isAlarm;
-    priv
 
     public boolean isAlarm() {
         return isAlarm;

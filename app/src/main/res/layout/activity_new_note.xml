@@ -34,6 +34,6 @@
         <ImageView
             android:layout_width="@dimen/clock_height_2"
             android:layout_height="@dimen/clock_height_2"
-            android:background="@mipmap/ic_launcher"/>
+            android:background="@drawable/ic_access_alarm_black_24dp"/>
     </LinearLayout>
 </RelativeLayout>

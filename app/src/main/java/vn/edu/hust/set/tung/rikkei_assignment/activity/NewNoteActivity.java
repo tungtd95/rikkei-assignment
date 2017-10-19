@@ -16,4 +16,5 @@ public class NewNoteActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_note);
     }
+
 }
