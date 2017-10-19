@@ -6,4 +6,5 @@
     <dimen name="clock_image_height">20dp</dimen>
     <dimen name="layout_padding">10dp</dimen>
     <dimen name="layout_margin">10dp</dimen>
+    <dimen name="clock_height_2">30dp</dimen>
 </resources>

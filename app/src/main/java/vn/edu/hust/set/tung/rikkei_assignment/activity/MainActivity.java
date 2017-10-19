@@ -9,6 +9,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -22,18 +24,13 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int GRID_SIZE = 3;
     public static final int GRID_SPACE = 10;
-    public static final String LAYOUT_MANAGER_SHARED = "my abcxyz layout manager";
 
     DBC dbc;
     RecyclerView rvUsers;
     NoteAdapter noteAdapter;
-
-    RecyclerView.LayoutManager linearManager;
     GridLayoutManager gridManager;
     ItemDecorationAlbumColumns gridDecorator;
-    DividerItemDecoration linerDecorator;
 
-    int grilin = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,22 +38,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         rvUsers = (RecyclerView) findViewById(R.id.rvUsers);
 
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-        grilin = sharedPreferences.getInt(LAYOUT_MANAGER_SHARED, 0);
-
         dbc = DBC.getInstance(this);
         noteAdapter = new NoteAdapter(dbc.getListNote());
         gridManager = new GridLayoutManager(this, GRID_SIZE, LinearLayoutManager.VERTICAL, false);
-        linearManager = new LinearLayoutManager(getApplicationContext());
         gridDecorator = new ItemDecorationAlbumColumns(GRID_SPACE, GRID_SIZE);
-        linerDecorator = new DividerItemDecoration(rvUsers.getContext(), DividerItemDecoration.VERTICAL);
 
-        if (grilin == 0) {
-            setLinearManager();
-        } else {
-            setGridManager();
-        }
         rvUsers.setAdapter(noteAdapter);
+        rvUsers.setLayoutManager(gridManager);
+        rvUsers.addItemDecoration(gridDecorator);
 
         rvUsers.addOnItemTouchListener(
                 new RecyclerItemClickListener(
@@ -73,21 +62,11 @@ public class MainActivity extends AppCompatActivity {
                 }));
     }
 
-    public void setGridManager() {
-        rvUsers.setLayoutManager(gridManager);
-        rvUsers.addItemDecoration(gridDecorator);
-    }
-
-    public void setLinearManager() {
-        rvUsers.setLayoutManager(linearManager);
-        rvUsers.addItemDecoration(linerDecorator);
-    }
-
-    public void setPreference() {
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(LAYOUT_MANAGER_SHARED, grilin);
-        editor.commit();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return true;
     }
 
     @Override
