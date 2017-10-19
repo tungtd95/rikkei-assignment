@@ -12,6 +12,15 @@ public class Note {
     private String content;
     private String time;
     private ArrayList<String> listImage;
+    boolean isAlarm;
+
+    public boolean isAlarm() {
+        return isAlarm;
+    }
+
+    public void setAlarm(boolean alarm) {
+        isAlarm = alarm;
+    }
 
     public Note(String name, String content) {
         this.name = name;

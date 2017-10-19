@@ -10,12 +10,14 @@
         android:paddingLeft="@dimen/layout_padding"
         android:paddingRight="@dimen/layout_padding">
         <TextView
+            android:id="@+id/tvNoteName"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:layout_alignParentStart="true"
             android:text="Note Name"/>
         <ImageView
+            android:id="@+id/ivClock"
             android:layout_width="@dimen/clock_image_height"
             android:layout_height="@dimen/clock_image_height"
             android:background="@mipmap/ic_launcher"
