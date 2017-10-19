@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int KEY_GRID_SIZE = 2;
     public static final int KEY_GRID_SPACE = 30;
     public static final int KEY_NEW_NOTE = 123;
+    public static final String KEY_NOTE = "note";
 
     DBC dbc;
     RecyclerView rvUsers;
@@ -52,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
                         this, rvUsers, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Log.i("main", "position = " + position);
+                        Intent intent = new Intent(MainActivity.this, NewNoteActivity.class);
+                        intent.putExtra(KEY_NOTE, noteAdapter.getListNote().get(position));
+                        startActivityForResult(intent, KEY_NEW_NOTE);
                     }
 
                     @Override

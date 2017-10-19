@@ -7,4 +7,6 @@
     <dimen name="layout_padding">10dp</dimen>
     <dimen name="layout_margin">10dp</dimen>
     <dimen name="clock_height_2">30dp</dimen>
+
+    <dimen name="title">20sp</dimen>
 </resources>

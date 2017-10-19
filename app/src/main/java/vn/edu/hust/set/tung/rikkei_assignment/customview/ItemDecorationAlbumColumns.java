@@ -26,17 +26,17 @@ public class ItemDecorationAlbumColumns extends RecyclerView.ItemDecoration {
         int padding = parent.getWidth() / mGridSize - frameWidth;
         int itemPosition = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewAdapterPosition();
         if (itemPosition < mGridSize) {
-            outRect.top = 0;
+            outRect.top = padding;
         } else {
             outRect.top = mSizeGridSpacingPx;
         }
         if (itemPosition % mGridSize == 0) {
-            outRect.left = 0;
+            outRect.left = padding;
             outRect.right = padding;
             mNeedLeftSpacing = true;
         } else if ((itemPosition + 1) % mGridSize == 0) {
             mNeedLeftSpacing = false;
-            outRect.right = 0;
+            outRect.right = padding;
             outRect.left = padding;
         } else if (mNeedLeftSpacing) {
             mNeedLeftSpacing = false;
@@ -55,6 +55,6 @@ public class ItemDecorationAlbumColumns extends RecyclerView.ItemDecoration {
             outRect.left = mSizeGridSpacingPx / 2;
             outRect.right = mSizeGridSpacingPx / 2;
         }
-        outRect.bottom = 0;
+        outRect.bottom = padding;
     }
 }
