@@ -1,5 +1,6 @@
-package vn.edu.hust.set.tung.rikkei_assignment;
+package vn.edu.hust.set.tung.rikkei_assignment.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,8 +9,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
+import vn.edu.hust.set.tung.rikkei_assignment.R;
 import vn.edu.hust.set.tung.rikkei_assignment.customview.ItemDecorationAlbumColumns;
 import vn.edu.hust.set.tung.rikkei_assignment.customview.RecyclerItemClickListener;
 import vn.edu.hust.set.tung.rikkei_assignment.customview.NoteAdapter;
@@ -85,5 +88,17 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(LAYOUT_MANAGER_SHARED, grilin);
         editor.commit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.itemAdd:
+                Intent intent = new Intent(this, NewNoteActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return true;
+        }
     }
 }
