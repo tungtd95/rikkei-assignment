@@ -27,7 +27,7 @@ public class DBHelper extends SQLiteOpenHelper {
             "create table if not exists " + Util.DB_TABLE_IMAGE + " (" +
                     Util.DB_IMAGE_ID + " integer primary key autoincrement not null, " +
                     Util.DB_IMAGE_LINK + " text, " +
-                    Util.DB_NOTE_ID + " integer primary key not null);";
+                    Util.DB_NOTE_ID + " integer);";
 
 
     public DBHelper(Context context) {

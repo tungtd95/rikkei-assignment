@@ -17,12 +17,13 @@ import vn.edu.hust.set.tung.rikkei_assignment.customview.ItemDecorationAlbumColu
 import vn.edu.hust.set.tung.rikkei_assignment.customview.RecyclerItemClickListener;
 import vn.edu.hust.set.tung.rikkei_assignment.customview.NoteAdapter;
 import vn.edu.hust.set.tung.rikkei_assignment.db.DBC;
+import vn.edu.hust.set.tung.rikkei_assignment.util.Echo;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int KEY_GRID_SIZE = 3;
-    public static final int KEY_GRID_SPACE = 10;
-    public static final int KEY_NEW_NOTE = 123123;
+    public static final int KEY_GRID_SIZE = 2;
+    public static final int KEY_GRID_SPACE = 30;
+    public static final int KEY_NEW_NOTE = 123;
 
     DBC dbc;
     RecyclerView rvUsers;
@@ -72,8 +73,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.itemAdd:
-                Intent intent = new Intent(this, NewNoteActivity.class);
-                startActivityForResult(intent, KEY_NEW_NOTE);
+                try {
+                    Intent intent = new Intent(this, NewNoteActivity.class);
+                    startActivityForResult(intent, KEY_NEW_NOTE);
+                }catch (Exception e) {
+                    Echo.echo("item add " + e.toString());
+                }
                 return true;
             default:
                 return true;

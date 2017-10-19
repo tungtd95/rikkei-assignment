@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 
 import vn.edu.hust.set.tung.rikkei_assignment.model.Note;
+import vn.edu.hust.set.tung.rikkei_assignment.util.Echo;
 
 /**
  * Created by tungt on 10/17/17.
@@ -36,10 +37,13 @@ public class DBC {
     public ArrayList<Note> getListNote() {
         ArrayList<Note> list = new ArrayList<>();
         Cursor cursor = dbRead.rawQuery("select * from " + Util.DB_TABLE_NOTE, null);
-        while (cursor.moveToFirst()) {
+        while (cursor.moveToNext()) {
             String name = cursor.getString(cursor.getColumnIndex(Util.DB_NOTE_NAME));
             String content = cursor.getString(cursor.getColumnIndex(Util.DB_NOTE_CONTENT));
-            list.add(new Note(name, content));
+            String time = cursor.getString(cursor.getColumnIndex(Util.DB_NOTE_TIME_CREATE));
+            Note note = new Note(name, content);
+            note.setTime(time);
+            list.add(note);
         }
         return list;
     }
@@ -48,6 +52,8 @@ public class DBC {
         ContentValues contentValues = new ContentValues();
         contentValues.put(Util.DB_NOTE_NAME, note.getName());
         contentValues.put(Util.DB_NOTE_CONTENT, note.getContent());
+        contentValues.put(Util.DB_NOTE_TIME_CREATE, note.getTime());
+        Echo.echo("note time = " + note.getTime());
         return dbWrite.insert(Util.DB_TABLE_NOTE, null, contentValues);
     }
 
