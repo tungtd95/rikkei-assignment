@@ -42,7 +42,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/rlSpace"
         android:layout_margin="@dimen/layout_margin"
-        android:textColor="@color/mainPart"/>
+        android:textColor="@color/mainPart"
+        android:maxLines="4"/>
     <TextView
         android:id="@+id/tvClock"
         android:layout_width="wrap_content"

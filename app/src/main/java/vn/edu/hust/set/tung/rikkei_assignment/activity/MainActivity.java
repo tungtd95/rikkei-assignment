@@ -1,6 +1,7 @@
 package vn.edu.hust.set.tung.rikkei_assignment.activity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,8 +22,8 @@ import vn.edu.hust.set.tung.rikkei_assignment.util.Echo;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int KEY_GRID_SIZE = 2;
-    public static final int KEY_GRID_SPACE = 30;
+    int KEY_GRID_SIZE = 2;
+    int KEY_GRID_SPACE = 30;
     public static final int KEY_NEW_NOTE = 123;
     public static final String KEY_NOTE = "note";
 
@@ -37,9 +38,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        rvUsers = (RecyclerView) findViewById(R.id.rvUsers);
 
         dbc = DBC.getInstance(this);
+        int ori = this.getResources().getConfiguration().orientation;
+        if (ori == Configuration.ORIENTATION_LANDSCAPE) {
+            KEY_GRID_SIZE = 3;
+            KEY_GRID_SPACE = 35;
+        }
+
+        rvUsers = (RecyclerView) findViewById(R.id.rvUsers);
         noteAdapter = new NoteAdapter(dbc.getListNote());
         gridManager = new GridLayoutManager(this, KEY_GRID_SIZE, LinearLayoutManager.VERTICAL, false);
         gridDecorator = new ItemDecorationAlbumColumns(KEY_GRID_SPACE, KEY_GRID_SIZE);
@@ -95,4 +102,5 @@ public class MainActivity extends AppCompatActivity {
             noteAdapter.notifyDataSetChanged();
         }
     }
+
 }

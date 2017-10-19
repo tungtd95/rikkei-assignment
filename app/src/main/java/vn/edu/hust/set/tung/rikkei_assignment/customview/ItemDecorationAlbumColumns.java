@@ -55,6 +55,6 @@ public class ItemDecorationAlbumColumns extends RecyclerView.ItemDecoration {
             outRect.left = mSizeGridSpacingPx / 2;
             outRect.right = mSizeGridSpacingPx / 2;
         }
-        outRect.bottom = padding;
+        outRect.bottom = 0;
     }
 }

@@ -30,17 +30,24 @@ public class NewNoteActivity extends AppCompatActivity {
     EditText etContent;
     TextView tvNewNoteClock;
     DBC dbc;
+    Note mNote;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_note);
+        mNote = getIntent().getParcelableExtra(MainActivity.KEY_NOTE);
+        if (mNote != null) {
+            Echo.echo("mNote = " + mNote.getName());
+        } else {
+            Echo.echo("mNote null");
+        }
         etTitle = (EditText) findViewById(R.id.etTitle);
         etContent = (EditText) findViewById(R.id.etContent);
         tvNewNoteClock = (TextView) findViewById(R.id.tvNewNoteClock);
 
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         String formattedDate = df.format(c.getTime());
         tvNewNoteClock.setText(formattedDate);
 
