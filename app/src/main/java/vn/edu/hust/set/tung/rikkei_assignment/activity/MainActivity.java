@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             KEY_GRID_SPACE = 35;
         }
 
-        rvUsers = (RecyclerView) findViewById(R.id.rvUsers);
+        rvUsers = (RecyclerView) findViewById(R.id.rvNote);
         noteAdapter = new NoteAdapter(dbc.getListNote());
         gridManager = new GridLayoutManager(this, KEY_GRID_SIZE, LinearLayoutManager.VERTICAL, false);
         gridDecorator = new ItemDecorationAlbumColumns(KEY_GRID_SPACE, KEY_GRID_SIZE);

@@ -13,4 +13,6 @@
     <color name="btnBlue">#7586f5</color>
 
     <color name="btnNotEnable">#b9b9b9</color>
+
+    <color name="colorText">#000000</color>
 </resources>

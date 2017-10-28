@@ -17,4 +17,5 @@
 
     <dimen name="icon_size_next">50dp</dimen>
     <dimen name="icon_size_share">30dp</dimen>
+    <dimen name="body">15sp</dimen>
 </resources>
