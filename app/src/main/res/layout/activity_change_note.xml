@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlNewNote"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/icon_size_next">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvNewNoteClock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/layout_margin"
+                android:layout_marginTop="@dimen/layout_margin"
+                android:text="20/10/2017 00:56" />
+
+            <EditText
+                android:id="@+id/etTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvNewNoteClock"
+                android:hint="@string/hint_title"
+                android:paddingLeft="@dimen/layout_padding" />
+
+            <EditText
+                android:id="@+id/etContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etTitle"
+                android:hint="@string/hint_content"
+                android:paddingLeft="@dimen/layout_padding" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etContent"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/layout_padding">
+
+                <ImageView
+                    android:layout_width="@dimen/clock_height_2"
+                    android:layout_height="@dimen/clock_height_2"
+                    android:background="@drawable/ic_access_alarm_black_24dp" />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/lnNavigate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:weightSum="4">
+
+        <RelativeLayout
+            android:id="@+id/rlBack"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="@dimen/icon_size_next"
+                android:layout_height="@dimen/icon_size_next"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ic_navigate_before_black_24dp" />
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/btnNotEnable"
+            android:layout_marginBottom="@dimen/layout_margin"
+            android:layout_marginTop="@dimen/layout_margin">
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlShare"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="@dimen/icon_size_share"
+                android:layout_height="@dimen/icon_size_share"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ic_share_black_24dp" />
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/btnNotEnable"
+            android:layout_marginBottom="@dimen/layout_margin"
+            android:layout_marginTop="@dimen/layout_margin">
+
+        </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/rlDelete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="@dimen/icon_size_share"
+                android:layout_height="@dimen/icon_size_share"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ic_delete_black_24dp" />
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/btnNotEnable"
+            android:layout_marginBottom="@dimen/layout_margin"
+            android:layout_marginTop="@dimen/layout_margin">
+
+        </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/rlNext"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="@dimen/icon_size_next"
+                android:layout_height="@dimen/icon_size_next"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_navigate_next_black_24dp" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

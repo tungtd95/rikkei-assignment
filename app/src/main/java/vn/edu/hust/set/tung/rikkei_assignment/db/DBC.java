@@ -41,8 +41,14 @@ public class DBC {
             String name = cursor.getString(cursor.getColumnIndex(Util.DB_NOTE_NAME));
             String content = cursor.getString(cursor.getColumnIndex(Util.DB_NOTE_CONTENT));
             String time = cursor.getString(cursor.getColumnIndex(Util.DB_NOTE_TIME_CREATE));
+            int color = cursor.getInt(cursor.getColumnIndex(Util.DB_NOTE_COLOR));
+            int id = cursor.getInt(cursor.getColumnIndex(Util.DB_NOTE_ID));
+
             Note note = new Note(name, content);
             note.setTime(time);
+            note.setColor(color);
+            note.setId(id);
+
             list.add(note);
         }
         return list;
@@ -53,16 +59,23 @@ public class DBC {
         contentValues.put(Util.DB_NOTE_NAME, note.getName());
         contentValues.put(Util.DB_NOTE_CONTENT, note.getContent());
         contentValues.put(Util.DB_NOTE_TIME_CREATE, note.getTime());
-        Echo.echo("note time = " + note.getTime());
+        contentValues.put(Util.DB_NOTE_COLOR, note.getColor());
         return dbWrite.insert(Util.DB_TABLE_NOTE, null, contentValues);
     }
 
-    public void removeNote(int userID) {
-
+    public void removeNote(Note note) {
+        dbWrite.execSQL("delete from " + Util.DB_TABLE_NOTE + " where " +
+                Util.DB_NOTE_ID + " = " + note.getId());
     }
 
     public void editNote(Note newNote) {
-
+        String query = "update " + Util.DB_TABLE_NOTE + " set " +
+                Util.DB_NOTE_NAME + " = '" + newNote.getName() + "', " +
+                Util.DB_NOTE_TIME_CREATE + " = '" + newNote.getTime() + "', " +
+                Util.DB_NOTE_CONTENT + " = '" + newNote.getContent() + "', " +
+                Util.DB_NOTE_COLOR + " = '" + newNote.getColor() + "' where " +
+                Util.DB_NOTE_ID + " = " + newNote.getId() + ";";
+        dbWrite.execSQL(query);
     }
 
     public void finish() {

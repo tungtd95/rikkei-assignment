@@ -21,7 +21,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     Util.DB_NOTE_CONTENT + " TEXT, " +
                     Util.DB_NOTE_TIME_CREATE + " TEXT, " +
                     Util.DB_NOTE_TIME_REMIND + " TEXT, " +
-                    Util.DB_NOTE_IS_ALARM + " INTEGER);";
+                    Util.DB_NOTE_IS_ALARM + " INTEGER, " +
+                    Util.DB_NOTE_COLOR + " INTEGER);";
 
     private static final String DB_CREATE_TABLE_IMAGE =
             "create table if not exists " + Util.DB_TABLE_IMAGE + " (" +

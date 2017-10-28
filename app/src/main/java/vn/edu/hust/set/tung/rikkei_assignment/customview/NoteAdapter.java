@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.UserViewHolder
         holder.tvNoteName.setText(note.getName());
         holder.tvContent.setText(note.getContent());
         holder.tvClock.setText(note.getTime());
+        holder.rlItem.setBackgroundColor(note.getColor());
         if (note.isAlarm()) {
             holder.ivClock.setVisibility(View.VISIBLE);
         } else {
@@ -53,12 +55,14 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.UserViewHolder
         ImageView ivClock;
         TextView tvContent;
         TextView tvClock;
+        RelativeLayout rlItem;
         public UserViewHolder(View itemView) {
             super(itemView);
             tvNoteName = itemView.findViewById(R.id.tvNoteName);
             ivClock = itemView.findViewById(R.id.ivClock);
             tvClock = itemView.findViewById(R.id.tvClock);
             tvContent = itemView.findViewById(R.id.tvContent);
+            rlItem = itemView.findViewById(R.id.rlItem);
         }
     }
 

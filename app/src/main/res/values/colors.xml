@@ -6,4 +6,11 @@
     <color name="layoutBackGround">#e7e5e5</color>
     <color name="itemColor">#fff</color>
     <color name="mainPart">#000000</color>
+
+    <color name="btnWhite">#fff</color>
+    <color name="btnYellow">#fffb00</color>
+    <color name="btnGreen">#2fff00</color>
+    <color name="btnBlue">#7586f5</color>
+
+    <color name="btnNotEnable">#b9b9b9</color>
 </resources>

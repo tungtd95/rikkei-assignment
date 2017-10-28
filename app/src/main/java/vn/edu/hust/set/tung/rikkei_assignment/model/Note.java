@@ -2,6 +2,7 @@ package vn.edu.hust.set.tung.rikkei_assignment.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 
@@ -9,39 +10,19 @@ import java.util.ArrayList;
  * Created by tungt on 10/17/17.
  */
 
-public class Note implements Parcelable{
+public class Note{
     private int id;
     private String name;
     private String content;
     private String time;
     private ArrayList<String> listImage;
     boolean isAlarm;
-
-    protected Note(Parcel in) {
-        id = in.readInt();
-        name = in.readString();
-        content = in.readString();
-        time = in.readString();
-        listImage = in.createStringArrayList();
-        isAlarm = in.readByte() != 0;
-    }
+    private int color;
 
     public Note(String name, String content) {
         this.name = name;
         this.content = content;
     }
-
-    public static final Creator<Note> CREATOR = new Creator<Note>() {
-        @Override
-        public Note createFromParcel(Parcel in) {
-            return new Note(in);
-        }
-
-        @Override
-        public Note[] newArray(int size) {
-            return new Note[size];
-        }
-    };
 
     public boolean isAlarm() {
         return isAlarm;
@@ -91,18 +72,38 @@ public class Note implements Parcelable{
         this.listImage = listImage;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public int getColor() {
+        return color;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
-        parcel.writeString(name);
-        parcel.writeString(content);
-        parcel.writeString(time);
-        parcel.writeStringList(listImage);
-        parcel.writeByte((byte) (isAlarm ? 1 : 0));
+    public void setColor(int color) {
+        this.color = color;
     }
+
+//    @Override
+//    public int compareTo(@NonNull Note otherNote) {
+//        if (this.id != otherNote.id) {
+//            return -1;
+//        }
+//        if (this.name != null && !this.name.equals(otherNote.name)) {
+//            return -1;
+//        }
+//        if (this.name != null && !this.content.equals(otherNote.content)) {
+//            return -1;
+//        }
+//        if (this.time != null && !this.time.equals(otherNote.time)) {
+//            return -1;
+//        }
+//        if (this.color != otherNote.color) {
+//            return -1;
+//        }
+//        if (this.listImage != null && otherNote.listImage != null) {
+//            for (int)
+//        }
+//        if ((this.listImage == null && otherNote.listImage != null) ||
+//                (this.listImage != null && otherNote.listImage == null)) {
+//            return -1;
+//        }
+//        return 0;
+//    }
 }

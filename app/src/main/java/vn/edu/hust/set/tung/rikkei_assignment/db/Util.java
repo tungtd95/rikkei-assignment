@@ -16,6 +16,7 @@ public class Util {
     public static final String DB_NOTE_TIME_CREATE = "time_create";
     public static final String DB_NOTE_TIME_REMIND = "time_remind";
     public static final String DB_NOTE_IS_ALARM = "is_alarm";
+    public static final String DB_NOTE_COLOR = "color";
 
     public static final String DB_TABLE_IMAGE = "image";
     public static final String DB_IMAGE_ID = "image_id";

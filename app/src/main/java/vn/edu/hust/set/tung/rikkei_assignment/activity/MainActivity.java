@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,10 +21,11 @@ import vn.edu.hust.set.tung.rikkei_assignment.util.Echo;
 
 public class MainActivity extends AppCompatActivity {
 
-    int KEY_GRID_SIZE = 2;
-    int KEY_GRID_SPACE = 30;
     public static final int KEY_NEW_NOTE = 123;
     public static final String KEY_NOTE = "note";
+    public static final int KEY_ADD = -1;
+    int KEY_GRID_SIZE = 2;
+    int KEY_GRID_SPACE = 30;
 
     DBC dbc;
     RecyclerView rvUsers;
@@ -60,9 +60,7 @@ public class MainActivity extends AppCompatActivity {
                         this, rvUsers, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(MainActivity.this, NewNoteActivity.class);
-                        intent.putExtra(KEY_NOTE, noteAdapter.getListNote().get(position));
-                        startActivityForResult(intent, KEY_NEW_NOTE);
+                        gotoNew(position);
                     }
 
                     @Override
@@ -84,9 +82,8 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.itemAdd:
                 try {
-                    Intent intent = new Intent(this, NewNoteActivity.class);
-                    startActivityForResult(intent, KEY_NEW_NOTE);
-                }catch (Exception e) {
+                    gotoNew(KEY_ADD);
+                } catch (Exception e) {
                     Echo.echo("item add " + e.toString());
                 }
                 return true;
@@ -97,10 +94,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == KEY_NEW_NOTE && requestCode == RESULT_OK) {
+        if (requestCode == KEY_NEW_NOTE && resultCode == RESULT_OK) {
             noteAdapter.setListNote(dbc.getListNote());
             noteAdapter.notifyDataSetChanged();
         }
+    }
+
+    public void gotoNew(int position) {
+        Intent intent = new Intent(MainActivity.this, ChangeNoteActivity.class);
+        intent.putExtra(KEY_NOTE, position);
+        startActivityForResult(intent, KEY_NEW_NOTE);
     }
 
 }
