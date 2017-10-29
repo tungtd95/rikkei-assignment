@@ -5,8 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.io.File;
 import java.util.ArrayList;
 
+import vn.edu.hust.set.tung.rikkei_assignment.model.Image;
 import vn.edu.hust.set.tung.rikkei_assignment.model.Note;
 import vn.edu.hust.set.tung.rikkei_assignment.util.Echo;
 
@@ -48,42 +50,50 @@ public class DBC {
             note.setTime(time);
             note.setColor(color);
             note.setId(id);
+            note.setListImage(getListImage(note));
 
             list.add(note);
         }
         return list;
     }
     
-    public ArrayList<String> getListImage(int idNote) {
-        ArrayList<String> listImage = new ArrayList<>();
+    public ArrayList<Image> getListImage(Note note) {
+        long idNote = note.getId();
+        ArrayList<Image> listImage = new ArrayList<>();
         Cursor cursor = dbRead.rawQuery(
                 "select * from " + Util.DB_TABLE_IMAGE + " where " + Util.DB_NOTE_ID + " = " + idNote, 
                 null
         );
         
         while (cursor.moveToNext()) {
-            // TODO: 10/29/17 Create class Image(link, id) 
+            long id = cursor.getLong(cursor.getColumnIndex(Util.DB_IMAGE_ID));
+            String link = cursor.getString(cursor.getColumnIndex(Util.DB_IMAGE_LINK));
+            Image image = new Image(link);
+            image.setId(id);
+            listImage.add(image);
         }
-        
+
         return listImage;
     }
 
-    public long addNote(Note note) {
+    public void addNote(Note note) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(Util.DB_NOTE_NAME, note.getName());
         contentValues.put(Util.DB_NOTE_CONTENT, note.getContent());
         contentValues.put(Util.DB_NOTE_TIME_CREATE, note.getTime());
         contentValues.put(Util.DB_NOTE_COLOR, note.getColor());
         long id = dbWrite.insert(Util.DB_TABLE_NOTE, null, contentValues);
-        addListImage(note.getListImage(), id);
-        return id;
+        note.setId(id);
+        addListImage(note);
     }
 
-    public void addListImage(ArrayList<String> listImage, long idNote) {
+    public void addListImage(Note note) {
+        ArrayList<Image> listImage = note.getListImage();
+        long idNote = note.getId();
         if (listImage != null) {
-            for (String image : listImage) {
+            for (Image image : listImage) {
                 ContentValues contentValues = new ContentValues();
-                contentValues.put(Util.DB_IMAGE_LINK, image);
+                contentValues.put(Util.DB_IMAGE_LINK, image.getLink());
                 contentValues.put(Util.DB_NOTE_ID, idNote);
                 dbWrite.insert(Util.DB_TABLE_IMAGE, null, contentValues);
             }
@@ -92,6 +102,15 @@ public class DBC {
 
     public void removeNote(Note note) {
         dbWrite.execSQL("delete from " + Util.DB_TABLE_NOTE + " where " +
+                Util.DB_NOTE_ID + " = " + note.getId());
+        for (Image image : note.getListImage()) {
+            new File(image.getLink()).delete();
+        }
+        removeImage(note);
+    }
+
+    public void removeImage(Note note) {
+        dbWrite.execSQL("delete from " + Util.DB_TABLE_IMAGE + " where " +
                 Util.DB_NOTE_ID + " = " + note.getId());
     }
 
@@ -103,6 +122,8 @@ public class DBC {
                 Util.DB_NOTE_COLOR + " = '" + newNote.getColor() + "' where " +
                 Util.DB_NOTE_ID + " = " + newNote.getId() + ";";
         dbWrite.execSQL(query);
+        removeImage(newNote);
+        addListImage(newNote);
     }
 
     public void finish() {

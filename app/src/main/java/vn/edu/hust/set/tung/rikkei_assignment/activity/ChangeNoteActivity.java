@@ -23,9 +23,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -42,9 +40,11 @@ import vn.edu.hust.set.tung.rikkei_assignment.customview.ChooseColorDialog;
 import vn.edu.hust.set.tung.rikkei_assignment.customview.ImageAdapter;
 import vn.edu.hust.set.tung.rikkei_assignment.customview.ItemDecorationAlbumColumns;
 import vn.edu.hust.set.tung.rikkei_assignment.customview.OnColorClicked;
+import vn.edu.hust.set.tung.rikkei_assignment.customview.OnImageRemove;
 import vn.edu.hust.set.tung.rikkei_assignment.customview.OnPhotoListener;
 import vn.edu.hust.set.tung.rikkei_assignment.customview.PhotoDialog;
 import vn.edu.hust.set.tung.rikkei_assignment.db.DBC;
+import vn.edu.hust.set.tung.rikkei_assignment.model.Image;
 import vn.edu.hust.set.tung.rikkei_assignment.model.Note;
 import vn.edu.hust.set.tung.rikkei_assignment.util.Echo;
 
@@ -52,13 +52,12 @@ import vn.edu.hust.set.tung.rikkei_assignment.util.Echo;
  * Created by Administrator on 20/10/2017.
  */
 
-public class ChangeNoteActivity extends AppCompatActivity implements OnColorClicked, OnPhotoListener {
+public class ChangeNoteActivity extends AppCompatActivity implements OnColorClicked, OnPhotoListener, OnImageRemove {
 
     public static final String KEY_DIR = "/TungvdNote/";
     public static final int KEY_CAMERA = 321;
     public static final int KEY_PERMISSION_CAMERA = 1;
-    int gridSize = 3;
-    int gridPadding = 10;
+    public static final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + KEY_DIR;
 
     EditText etTitle;
     EditText etContent;
@@ -78,16 +77,15 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
     DBC dbc;
     int indexNote;
     ArrayList<Note> listNote;
-    ArrayList<String> listImage;
+    ArrayList<Image> listImage;
     ImageAdapter imageAdapter;
     GridLayoutManager gridLayoutManager;
     ItemDecorationAlbumColumns gridDecorator;
 
     boolean isChange = false;
-
+    int gridSize = 3;
+    int gridPadding = 10;
     int mColor;
-
-    final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + KEY_DIR;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -149,12 +147,7 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
                 new ChooseColorDialog(ChangeNoteActivity.this).show();
                 return true;
             case R.id.itemSave:
-                if (indexNote == MainActivity.KEY_ADD) {
-                    addNote();
-                } else {
-                    editNote();
-                }
-                gotoMain();
+                save();
                 return true;
             default:
                 return false;
@@ -171,6 +164,15 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
         }
     }
 
+    public void save() {
+        if (indexNote == MainActivity.KEY_ADD) {
+            addNote();
+        } else {
+            editNote();
+        }
+        gotoMain();
+    }
+
     public void gotoMain() {
         Intent intent = new Intent(this, MainActivity.class);
         setResult(RESULT_OK, intent);
@@ -180,6 +182,10 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
     public void setEditConfig() {
         listNote = dbc.getListNote();
         mColor = listNote.get(indexNote).getColor();
+        listImage = listNote.get(indexNote).getListImage();
+        imageAdapter.setListImage(listImage);
+        imageAdapter.notifyDataSetChanged();
+
         etTitle.setText(listNote.get(indexNote).getName());
         etContent.setText(listNote.get(indexNote).getContent());
         tvNewNoteClock.setText(listNote.get(indexNote).getTime());
@@ -227,11 +233,24 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
                 setEditConfig();
             }
         });
+
+        rlShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editNote();
+                Note note = listNote.get(indexNote);
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, note.getName()+"\n"+note.getContent());
+                shareIntent.setType("text/plain");
+                startActivity(shareIntent);
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void setAddConfig() {
-
+        listImage = new ArrayList<>();
         mColor = getResources().getColor(R.color.btnWhite, null);
         tvNewNoteClock.setText(getTime());
         rlNewNote.setBackgroundColor(mColor);
@@ -251,6 +270,7 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
         Note note = new Note(name, content);
         note.setTime(tvNewNoteClock.getText().toString());
         note.setColor(mColor);
+        note.setListImage(listImage);
         dbc.addNote(note);
     }
 
@@ -274,11 +294,13 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
         newNote.setColor(mColor);
         newNote.setTime(getTime());
         newNote.setId(oldNote.getId());
+        newNote.setListImage(listImage);
 
         if (isChange) {
             dbc.editNote(newNote);
             isChange = false;
         }
+        listNote = dbc.getListNote();
     }
 
     @Override
@@ -302,9 +324,10 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == KEY_CAMERA && resultCode == RESULT_OK) {
-            listImage.add(imagePath);
+            listImage.add(new Image(imagePath));
             imageAdapter.setListImage(listImage);
             imageAdapter.notifyDataSetChanged();
+            isChange = true;
         }
     }
 
@@ -340,5 +363,20 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, newFileUri);
         startActivityForResult(cameraIntent, KEY_CAMERA);
+    }
+
+    @Override
+    public void onRemove(int position) {
+        new File(listImage.get(position).getLink()).delete();
+        listImage.remove(position);
+        imageAdapter.setListImage(listImage);
+        imageAdapter.setListImage(listImage);
+        imageAdapter.notifyDataSetChanged();
+        isChange = true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        save();
     }
 }

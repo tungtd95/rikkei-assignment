@@ -11,11 +11,11 @@ import java.util.ArrayList;
  */
 
 public class Note{
-    private int id;
+    private long id;
     private String name;
     private String content;
     private String time;
-    private ArrayList<String> listImage;
+    private ArrayList<Image> listImage;
     boolean isAlarm;
     private int color;
 
@@ -48,11 +48,11 @@ public class Note{
         this.content = content;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -64,11 +64,11 @@ public class Note{
         this.time = time;
     }
 
-    public ArrayList<String> getListImage() {
+    public ArrayList<Image> getListImage() {
         return listImage;
     }
 
-    public void setListImage(ArrayList<String> listImage) {
+    public void setListImage(ArrayList<Image> listImage) {
         this.listImage = listImage;
     }
 
@@ -79,31 +79,4 @@ public class Note{
     public void setColor(int color) {
         this.color = color;
     }
-
-//    @Override
-//    public int compareTo(@NonNull Note otherNote) {
-//        if (this.id != otherNote.id) {
-//            return -1;
-//        }
-//        if (this.name != null && !this.name.equals(otherNote.name)) {
-//            return -1;
-//        }
-//        if (this.name != null && !this.content.equals(otherNote.content)) {
-//            return -1;
-//        }
-//        if (this.time != null && !this.time.equals(otherNote.time)) {
-//            return -1;
-//        }
-//        if (this.color != otherNote.color) {
-//            return -1;
-//        }
-//        if (this.listImage != null && otherNote.listImage != null) {
-//            for (int)
-//        }
-//        if ((this.listImage == null && otherNote.listImage != null) ||
-//                (this.listImage != null && otherNote.listImage == null)) {
-//            return -1;
-//        }
-//        return 0;
-//    }
 }

@@ -19,7 +19,7 @@ import vn.edu.hust.set.tung.rikkei_assignment.customview.NoteAdapter;
 import vn.edu.hust.set.tung.rikkei_assignment.db.DBC;
 import vn.edu.hust.set.tung.rikkei_assignment.util.Echo;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     public static final int KEY_NEW_NOTE = 123;
     public static final String KEY_NOTE = "note";

@@ -1,10 +1,6 @@
 package vn.edu.hust.set.tung.rikkei_assignment.customview;
 
 import android.content.Context;
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +11,10 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 import vn.edu.hust.set.tung.rikkei_assignment.R;
-import vn.edu.hust.set.tung.rikkei_assignment.util.Echo;
+import vn.edu.hust.set.tung.rikkei_assignment.activity.ChangeNoteActivity;
+import vn.edu.hust.set.tung.rikkei_assignment.model.Image;
 
 /**
  * Created by tungt on 10/29/17.
@@ -26,12 +22,14 @@ import vn.edu.hust.set.tung.rikkei_assignment.util.Echo;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
 
-    private ArrayList<String> listImage;
+    private ArrayList<Image> listImage;
     private Context context;
+    OnImageRemove onImageRemove;
 
-    public ImageAdapter(Context context, ArrayList<String> listImage) {
+    public ImageAdapter(ChangeNoteActivity changeNoteActivity, ArrayList<Image> listImage) {
         this.listImage = listImage;
-        this.context = context;
+        this.context = changeNoteActivity;
+        this.onImageRemove = changeNoteActivity;
     }
 
     @Override
@@ -41,14 +39,20 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     }
 
     @Override
-    public void onBindViewHolder(ImageViewHolder holder, int position) {
-        String imageLink = listImage.get(position);
+    public void onBindViewHolder(ImageViewHolder holder, final int position) {
+        String imageLink = listImage.get(position).getLink();
         File imgFile = new  File(imageLink);
         if(imgFile.exists()){
             Picasso.with(context).load("file://" + imgFile.getAbsolutePath()).resize(300, 400).into(holder.ivItemImage);
         } else {
             holder.ivItemImage.setBackground(holder.ivItemImage.getContext().getDrawable(R.drawable.ic_broken_image_black_24dp));
         }
+        holder.ivItemRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onImageRemove.onRemove(position);
+            }
+        });
     }
 
     @Override
@@ -66,11 +70,11 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         }
     }
 
-    public ArrayList<String> getListImage() {
+    public ArrayList<Image> getListImage() {
         return listImage;
     }
 
-    public void setListImage(ArrayList<String> listImage) {
+    public void setListImage(ArrayList<Image> listImage) {
         this.listImage = listImage;
     }
 }
