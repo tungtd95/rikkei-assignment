@@ -53,6 +53,20 @@ public class DBC {
         }
         return list;
     }
+    
+    public ArrayList<String> getListImage(int idNote) {
+        ArrayList<String> listImage = new ArrayList<>();
+        Cursor cursor = dbRead.rawQuery(
+                "select * from " + Util.DB_TABLE_IMAGE + " where " + Util.DB_NOTE_ID + " = " + idNote, 
+                null
+        );
+        
+        while (cursor.moveToNext()) {
+            // TODO: 10/29/17 Create class Image(link, id) 
+        }
+        
+        return listImage;
+    }
 
     public long addNote(Note note) {
         ContentValues contentValues = new ContentValues();
@@ -60,7 +74,20 @@ public class DBC {
         contentValues.put(Util.DB_NOTE_CONTENT, note.getContent());
         contentValues.put(Util.DB_NOTE_TIME_CREATE, note.getTime());
         contentValues.put(Util.DB_NOTE_COLOR, note.getColor());
-        return dbWrite.insert(Util.DB_TABLE_NOTE, null, contentValues);
+        long id = dbWrite.insert(Util.DB_TABLE_NOTE, null, contentValues);
+        addListImage(note.getListImage(), id);
+        return id;
+    }
+
+    public void addListImage(ArrayList<String> listImage, long idNote) {
+        if (listImage != null) {
+            for (String image : listImage) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(Util.DB_IMAGE_LINK, image);
+                contentValues.put(Util.DB_NOTE_ID, idNote);
+                dbWrite.insert(Util.DB_TABLE_IMAGE, null, contentValues);
+            }
+        }
     }
 
     public void removeNote(Note note) {

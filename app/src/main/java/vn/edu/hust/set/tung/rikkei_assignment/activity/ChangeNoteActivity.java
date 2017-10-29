@@ -3,7 +3,7 @@ package vn.edu.hust.set.tung.rikkei_assignment.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,10 +23,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.io.File;
@@ -54,8 +57,8 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
     public static final String KEY_DIR = "/TungvdNote/";
     public static final int KEY_CAMERA = 321;
     public static final int KEY_PERMISSION_CAMERA = 1;
-    public static final int KEY_GRID_SIZE = 3;
-    public static final int KEY_GRID_PADDING = 10;
+    int gridSize = 3;
+    int gridPadding = 10;
 
     EditText etTitle;
     EditText etContent;
@@ -69,6 +72,7 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
     ImageView ivBack;
     ImageView ivNext;
     RecyclerView rvImage;
+    ScrollView svMain;
 
 
     DBC dbc;
@@ -103,11 +107,16 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
         ivBack = (ImageView) findViewById(R.id.ivBack);
         ivNext = (ImageView) findViewById(R.id.ivNext);
         rvImage = (RecyclerView) findViewById(R.id.rvImage);
+        svMain = (ScrollView) findViewById(R.id.svMain);
 
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            gridSize = 5;
+            gridPadding = 15;
+        }
         listImage = new ArrayList<>();
         imageAdapter = new ImageAdapter(this, listImage);
-        gridLayoutManager = new GridLayoutManager(this, KEY_GRID_SIZE, LinearLayoutManager.VERTICAL, false);
-        gridDecorator = new ItemDecorationAlbumColumns(KEY_GRID_PADDING, KEY_GRID_SIZE);
+        gridLayoutManager = new GridLayoutManager(this, gridSize, LinearLayoutManager.VERTICAL, false);
+        gridDecorator = new ItemDecorationAlbumColumns(gridPadding, gridSize);
 
         rvImage.setLayoutManager(gridLayoutManager);
         rvImage.addItemDecoration(gridDecorator);
@@ -222,6 +231,7 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void setAddConfig() {
+
         mColor = getResources().getColor(R.color.btnWhite, null);
         tvNewNoteClock.setText(getTime());
         rlNewNote.setBackgroundColor(mColor);
