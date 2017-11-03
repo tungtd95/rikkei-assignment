@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/layout_margin">
+    <DatePicker
+        android:id="@+id/datePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </DatePicker>
+    <Button
+        android:id="@+id/btnDateOK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_ok"
+        android:layout_alignEnd="@id/datePicker"
+        android:layout_below="@id/datePicker"/>
+    <Button
+        android:id="@+id/btnDateCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_cancel"
+        android:layout_below="@id/datePicker"
+        android:layout_toLeftOf="@id/btnDateOK"/>
+</RelativeLayout>

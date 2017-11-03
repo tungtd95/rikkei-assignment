@@ -37,6 +37,8 @@ import java.util.Calendar;
 
 import vn.edu.hust.set.tung.rikkei_assignment.R;
 import vn.edu.hust.set.tung.rikkei_assignment.customview.ChooseColorDialog;
+import vn.edu.hust.set.tung.rikkei_assignment.customview.ChooseDateDialog;
+import vn.edu.hust.set.tung.rikkei_assignment.customview.ChooseHourDialog;
 import vn.edu.hust.set.tung.rikkei_assignment.customview.ImageAdapter;
 import vn.edu.hust.set.tung.rikkei_assignment.customview.ItemDecorationAlbumColumns;
 import vn.edu.hust.set.tung.rikkei_assignment.customview.OnColorClicked;
@@ -72,7 +74,10 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
     ImageView ivNext;
     RecyclerView rvImage;
     ScrollView svMain;
-
+    LinearLayout lnSetAlarm;
+    TextView tvPickHour;
+    TextView tvPickDate;
+    ImageView ivClearAlarm;
 
     DBC dbc;
     int indexNote;
@@ -106,6 +111,10 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
         ivNext = (ImageView) findViewById(R.id.ivNext);
         rvImage = (RecyclerView) findViewById(R.id.rvImage);
         svMain = (ScrollView) findViewById(R.id.svMain);
+        lnSetAlarm = (LinearLayout) findViewById(R.id.lnSetAlarm);
+        tvPickDate = (TextView) findViewById(R.id.tvPickDate);
+        tvPickHour = (TextView) findViewById(R.id.tvPickHour);
+        ivClearAlarm = (ImageView) findViewById(R.id.ivClearAlarm);
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             gridSize = 5;
@@ -128,6 +137,20 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
         } else {
             setEditConfig();
         }
+
+        tvPickHour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new ChooseHourDialog(ChangeNoteActivity.this).show();
+            }
+        });
+
+        tvPickDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new ChooseDateDialog(ChangeNoteActivity.this).show();
+            }
+        });
     }
 
     @Override
