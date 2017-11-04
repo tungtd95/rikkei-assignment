@@ -76,6 +76,7 @@
                         android:background="@drawable/ic_access_alarm_black_24dp" />
 
                     <LinearLayout
+                        android:id="@+id/lnDetailAlarm"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:weightSum="4">

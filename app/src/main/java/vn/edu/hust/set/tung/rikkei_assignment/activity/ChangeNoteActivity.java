@@ -34,6 +34,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 import vn.edu.hust.set.tung.rikkei_assignment.R;
 import vn.edu.hust.set.tung.rikkei_assignment.customview.ChooseColorDialog;
@@ -44,6 +45,7 @@ import vn.edu.hust.set.tung.rikkei_assignment.customview.ItemDecorationAlbumColu
 import vn.edu.hust.set.tung.rikkei_assignment.customview.OnColorClicked;
 import vn.edu.hust.set.tung.rikkei_assignment.customview.OnImageRemove;
 import vn.edu.hust.set.tung.rikkei_assignment.customview.OnPhotoListener;
+import vn.edu.hust.set.tung.rikkei_assignment.customview.OnPickTimeOK;
 import vn.edu.hust.set.tung.rikkei_assignment.customview.PhotoDialog;
 import vn.edu.hust.set.tung.rikkei_assignment.db.DBC;
 import vn.edu.hust.set.tung.rikkei_assignment.model.Image;
@@ -54,12 +56,13 @@ import vn.edu.hust.set.tung.rikkei_assignment.util.Echo;
  * Created by Administrator on 20/10/2017.
  */
 
-public class ChangeNoteActivity extends AppCompatActivity implements OnColorClicked, OnPhotoListener, OnImageRemove {
+public class ChangeNoteActivity extends AppCompatActivity implements OnColorClicked, OnPhotoListener, OnImageRemove, OnPickTimeOK {
 
     public static final String KEY_DIR = "/TungvdNote/";
     public static final int KEY_CAMERA = 321;
     public static final int KEY_PERMISSION_CAMERA = 1;
     public static final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + KEY_DIR;
+    public static final String KEY_LAST_INDEX = "last index";
 
     EditText etTitle;
     EditText etContent;
@@ -78,6 +81,7 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
     TextView tvPickHour;
     TextView tvPickDate;
     ImageView ivClearAlarm;
+    LinearLayout lnDetailAlarm;
 
     DBC dbc;
     int indexNote;
@@ -88,9 +92,15 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
     ItemDecorationAlbumColumns gridDecorator;
 
     boolean isChange = false;
+    boolean isAlarm = false;
     int gridSize = 3;
     int gridPadding = 10;
     int mColor;
+    int remindHour;
+    int remindMinute;
+    int remindDay;
+    int remindMonth;
+    int remindYear;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -115,8 +125,10 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
         tvPickDate = (TextView) findViewById(R.id.tvPickDate);
         tvPickHour = (TextView) findViewById(R.id.tvPickHour);
         ivClearAlarm = (ImageView) findViewById(R.id.ivClearAlarm);
+        lnDetailAlarm = (LinearLayout) findViewById(R.id.lnDetailAlarm);
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+        lnDetailAlarm.setVisibility(View.INVISIBLE);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             gridSize = 5;
             gridPadding = 15;
         }
@@ -132,12 +144,6 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
         indexNote = getIntent().getIntExtra(MainActivity.KEY_NOTE, MainActivity.KEY_ADD);
         dbc = DBC.getInstance(this);
 
-        if (indexNote == MainActivity.KEY_ADD) {
-            setAddConfig();
-        } else {
-            setEditConfig();
-        }
-
         tvPickHour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,6 +157,53 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
                 new ChooseDateDialog(ChangeNoteActivity.this).show();
             }
         });
+
+        ivClearAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                lnDetailAlarm.setVisibility(View.GONE);
+                isAlarm = false;
+                isChange = true;
+            }
+        });
+
+        lnSetAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                lnDetailAlarm.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (indexNote == MainActivity.KEY_ADD) {
+            setAddConfig();
+        } else {
+            setEditConfig();
+        }
+
+        tvPickHour.setText(remindHour + ":" + remindMinute);
+        tvPickDate.setText(remindDay + "/" + remindMonth + "/" + remindYear);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        save();
+        outState.putInt(KEY_LAST_INDEX, indexNote);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        int i = savedInstanceState.getInt(KEY_LAST_INDEX, -10);
+        if (i != -10) {
+            indexNote = i;
+        }
     }
 
     @Override
@@ -243,7 +296,7 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
             @Override
             public void onClick(View view) {
                 editNote();
-                indexNote --;
+                indexNote--;
                 setEditConfig();
             }
         });
@@ -252,7 +305,7 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
             @Override
             public void onClick(View view) {
                 editNote();
-                indexNote ++;
+                indexNote++;
                 setEditConfig();
             }
         });
@@ -264,11 +317,19 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
                 Note note = listNote.get(indexNote);
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, note.getName()+"\n"+note.getContent());
+                shareIntent.putExtra(Intent.EXTRA_TEXT, note.getName() + "\n" + note.getContent());
                 shareIntent.setType("text/plain");
                 startActivity(shareIntent);
             }
         });
+
+        if (listNote.get(indexNote).getTimeRemind() != null && listNote.get(indexNote).getTimeRemind().length() > 0) {
+            setTimeDetail(listNote.get(indexNote));
+            lnDetailAlarm.setVisibility(View.VISIBLE);
+            isAlarm = true;
+        } else {
+            getTimeDetail();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -278,12 +339,30 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
         tvNewNoteClock.setText(getTime());
         rlNewNote.setBackgroundColor(mColor);
         lnNavigate.setVisibility(View.GONE);
+        getTimeDetail();
     }
 
     public String getTime() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return df.format(c.getTime());
+    }
+
+    public void getTimeDetail() {
+        Calendar c = Calendar.getInstance(Locale.getDefault());
+        remindHour = c.get(Calendar.HOUR_OF_DAY);
+        remindMinute = c.get(Calendar.MINUTE);
+        remindDay = c.get(Calendar.DAY_OF_MONTH);
+        remindMonth = c.get(Calendar.MONTH);
+        remindYear = c.get(Calendar.YEAR);
+    }
+
+    public void setTimeDetail(Note c) {
+        remindHour = c.getRemindHour();
+        remindMinute = c.getRemindMinute();
+        remindDay = c.getRemindDay();
+        remindMonth = c.getRemindMonth();
+        remindYear = c.getRemindYear();
     }
 
     public void addNote() {
@@ -294,6 +373,7 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
         note.setTime(tvNewNoteClock.getText().toString());
         note.setColor(mColor);
         note.setListImage(listImage);
+        addAlarm(note);
         dbc.addNote(note);
     }
 
@@ -320,6 +400,7 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
         newNote.setListImage(listImage);
 
         if (isChange) {
+            addAlarm(newNote);
             dbc.editNote(newNote);
             isChange = false;
         }
@@ -332,7 +413,7 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                     this,
-                    new String[] { Manifest.permission.CAMERA,
+                    new String[]{Manifest.permission.CAMERA,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     KEY_PERMISSION_CAMERA
             );
@@ -359,16 +440,16 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
             int requestCode,
             @NonNull String[] permissions,
             @NonNull int[] grantResults
-    )
-    {
+    ) {
         if (grantResults.length > 0 &&
                 grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                grantResults[1] == PackageManager.PERMISSION_GRANTED) {
             requestCamera();
         }
     }
 
     String imagePath = "";
+
     public void requestCamera() {
 
         new File(dir).mkdirs();
@@ -401,5 +482,33 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
     @Override
     public void onBackPressed() {
         save();
+    }
+
+
+    @Override
+    public void onOKHour(int hour, int minute) {
+        remindHour = hour;
+        remindMinute = minute;
+        isChange = true;
+        isAlarm = true;
+        tvPickHour.setText(hour + ":" + minute);
+    }
+
+    @Override
+    public void onOKDate(int day, int month, int year) {
+        remindMonth = month;
+        remindDay = day;
+        remindYear = year;
+        isChange = true;
+        isAlarm = true;
+        tvPickDate.setText(day + "/" + month + "/" + year);
+    }
+
+    public void addAlarm(Note note) {
+        if (isAlarm) {
+            note.setTimeRemind(remindHour + " " + remindMinute + " " + remindDay + " " + remindMonth + " " + remindYear);
+        } else {
+            note.setTimeRemind("");
+        }
     }
 }

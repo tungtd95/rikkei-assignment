@@ -23,7 +23,7 @@
             android:id="@+id/ivClock"
             android:layout_width="@dimen/clock_image_height"
             android:layout_height="@dimen/clock_image_height"
-            android:background="@mipmap/ic_launcher"
+            android:background="@drawable/ic_access_alarm_black_24dp"
             android:layout_alignParentEnd="true"
             android:layout_centerInParent="true"/>
     </RelativeLayout>

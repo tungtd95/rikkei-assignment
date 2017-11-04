@@ -38,7 +38,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.UserViewHolder
         holder.tvContent.setText(note.getContent());
         holder.tvClock.setText(note.getTime());
         holder.rlItem.setBackgroundColor(note.getColor());
-        if (note.isAlarm()) {
+        if (note.getTimeRemind() != null && note.getTimeRemind().length() > 0) {
             holder.ivClock.setVisibility(View.VISIBLE);
         } else {
             holder.ivClock.setVisibility(View.INVISIBLE);

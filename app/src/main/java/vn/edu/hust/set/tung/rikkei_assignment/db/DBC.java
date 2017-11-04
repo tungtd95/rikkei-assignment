@@ -45,12 +45,14 @@ public class DBC {
             String time = cursor.getString(cursor.getColumnIndex(Util.DB_NOTE_TIME_CREATE));
             int color = cursor.getInt(cursor.getColumnIndex(Util.DB_NOTE_COLOR));
             int id = cursor.getInt(cursor.getColumnIndex(Util.DB_NOTE_ID));
+            String timeRemind = cursor.getString(cursor.getColumnIndex(Util.DB_NOTE_TIME_REMIND));
 
             Note note = new Note(name, content);
             note.setTime(time);
             note.setColor(color);
             note.setId(id);
             note.setListImage(getListImage(note));
+            note.setTimeRemind(timeRemind);
 
             list.add(note);
         }
@@ -82,6 +84,7 @@ public class DBC {
         contentValues.put(Util.DB_NOTE_CONTENT, note.getContent());
         contentValues.put(Util.DB_NOTE_TIME_CREATE, note.getTime());
         contentValues.put(Util.DB_NOTE_COLOR, note.getColor());
+        contentValues.put(Util.DB_NOTE_TIME_REMIND, note.getTimeRemind());
         long id = dbWrite.insert(Util.DB_TABLE_NOTE, null, contentValues);
         note.setId(id);
         addListImage(note);
@@ -119,6 +122,7 @@ public class DBC {
                 Util.DB_NOTE_NAME + " = '" + newNote.getName() + "', " +
                 Util.DB_NOTE_TIME_CREATE + " = '" + newNote.getTime() + "', " +
                 Util.DB_NOTE_CONTENT + " = '" + newNote.getContent() + "', " +
+                Util.DB_NOTE_TIME_REMIND + " = '" + newNote.getTimeRemind() + "', " +
                 Util.DB_NOTE_COLOR + " = '" + newNote.getColor() + "' where " +
                 Util.DB_NOTE_ID + " = " + newNote.getId() + ";";
         dbWrite.execSQL(query);

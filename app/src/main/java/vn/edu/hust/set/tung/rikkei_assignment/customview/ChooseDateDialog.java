@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 
 import vn.edu.hust.set.tung.rikkei_assignment.R;
+import vn.edu.hust.set.tung.rikkei_assignment.activity.ChangeNoteActivity;
 import vn.edu.hust.set.tung.rikkei_assignment.util.Echo;
 
 /**
@@ -20,8 +21,11 @@ public class ChooseDateDialog extends Dialog implements View.OnClickListener{
     Button btnOK;
     Button btnCancel;
 
-    public ChooseDateDialog(@NonNull Context context) {
-        super(context);
+    OnPickTimeOK onPickTimeOK;
+
+    public ChooseDateDialog(ChangeNoteActivity changeNoteActivity) {
+        super(changeNoteActivity);
+        this.onPickTimeOK = changeNoteActivity;
         setContentView(R.layout.dialog_choose_date);
         datePicker = (DatePicker) findViewById(R.id.datePicker);
         btnOK = (Button) findViewById(R.id.btnDateOK);
@@ -35,7 +39,8 @@ public class ChooseDateDialog extends Dialog implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnDateOK:
-                Echo.echo(datePicker.getDayOfMonth() + " " + datePicker.getMonth() + " " + datePicker.getYear());
+                onPickTimeOK.onOKDate(datePicker.getDayOfMonth(), datePicker.getMonth(), datePicker.getYear());
+                dismiss();
                 break;
             case R.id.btnDateCancel:
                 dismiss();

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TimePicker;
 
 import vn.edu.hust.set.tung.rikkei_assignment.R;
+import vn.edu.hust.set.tung.rikkei_assignment.activity.ChangeNoteActivity;
 import vn.edu.hust.set.tung.rikkei_assignment.util.Echo;
 
 /**
@@ -22,8 +23,11 @@ public class ChooseHourDialog extends Dialog implements View.OnClickListener{
     Button btnOK;
     Button btnCancel;
 
-    public ChooseHourDialog(@NonNull Context context) {
-        super(context);
+    OnPickTimeOK onPickTimeOK;
+
+    public ChooseHourDialog(ChangeNoteActivity changeNoteActivity) {
+        super(changeNoteActivity);
+        this.onPickTimeOK = changeNoteActivity;
         setContentView(R.layout.dialog_choose_hour);
 
         timePicker = (TimePicker) findViewById(R.id.timePicker);
@@ -39,7 +43,8 @@ public class ChooseHourDialog extends Dialog implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnHourOK:
-                Echo.echo(timePicker.getHour() + ":" + timePicker.getMinute());
+                onPickTimeOK.onOKHour(timePicker.getHour(), timePicker.getMinute());
+                dismiss();
                 break;
             case R.id.btnHourCancel:
                 dismiss();
