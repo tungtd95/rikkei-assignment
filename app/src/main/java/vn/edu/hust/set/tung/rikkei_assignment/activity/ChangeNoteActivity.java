@@ -193,7 +193,6 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        save();
         outState.putInt(KEY_LAST_INDEX, indexNote);
     }
 
