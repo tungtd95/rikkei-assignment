@@ -297,6 +297,9 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
             public void onClick(View view) {
                 editNote();
                 indexNote--;
+                isChange = false;
+                isAlarm = false;
+                lnDetailAlarm.setVisibility(View.INVISIBLE);
                 setEditConfig();
             }
         });
@@ -306,6 +309,9 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
             public void onClick(View view) {
                 editNote();
                 indexNote++;
+                isChange = false;
+                isAlarm = false;
+                lnDetailAlarm.setVisibility(View.INVISIBLE);
                 setEditConfig();
             }
         });
@@ -363,6 +369,8 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
         remindDay = c.getRemindDay();
         remindMonth = c.getRemindMonth();
         remindYear = c.getRemindYear();
+        tvPickHour.setText(remindHour + ":" + remindMinute);
+        tvPickDate.setText(remindDay + "/" + remindMonth + "/" + remindYear);
     }
 
     public void addNote() {
