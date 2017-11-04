@@ -144,6 +144,15 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
         indexNote = getIntent().getIntExtra(MainActivity.KEY_NOTE, MainActivity.KEY_ADD);
         dbc = DBC.getInstance(this);
 
+        if (indexNote == MainActivity.KEY_ADD) {
+            setAddConfig();
+        } else {
+            setEditConfig();
+        }
+
+        tvPickHour.setText(remindHour + ":" + remindMinute);
+        tvPickDate.setText(remindDay + "/" + remindMonth + "/" + remindYear);
+        
         tvPickHour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,36 +182,6 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
                 lnDetailAlarm.setVisibility(View.VISIBLE);
             }
         });
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        if (indexNote == MainActivity.KEY_ADD) {
-            setAddConfig();
-        } else {
-            setEditConfig();
-        }
-
-        tvPickHour.setText(remindHour + ":" + remindMinute);
-        tvPickDate.setText(remindDay + "/" + remindMonth + "/" + remindYear);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(KEY_LAST_INDEX, indexNote);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        int i = savedInstanceState.getInt(KEY_LAST_INDEX, -10);
-        if (i != -10) {
-            indexNote = i;
-        }
     }
 
     @Override
