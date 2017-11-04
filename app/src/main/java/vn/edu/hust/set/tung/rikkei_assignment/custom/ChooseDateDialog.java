@@ -1,15 +1,12 @@
-package vn.edu.hust.set.tung.rikkei_assignment.customview;
+package vn.edu.hust.set.tung.rikkei_assignment.custom;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 
 import vn.edu.hust.set.tung.rikkei_assignment.R;
 import vn.edu.hust.set.tung.rikkei_assignment.activity.ChangeNoteActivity;
-import vn.edu.hust.set.tung.rikkei_assignment.util.Echo;
 
 /**
  * Created by tungt on 11/04/17.

@@ -1,4 +1,4 @@
-package vn.edu.hust.set.tung.rikkei_assignment.customview;
+package vn.edu.hust.set.tung.rikkei_assignment.custom;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

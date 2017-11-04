@@ -13,9 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import vn.edu.hust.set.tung.rikkei_assignment.R;
-import vn.edu.hust.set.tung.rikkei_assignment.customview.ItemDecorationAlbumColumns;
-import vn.edu.hust.set.tung.rikkei_assignment.customview.RecyclerItemClickListener;
-import vn.edu.hust.set.tung.rikkei_assignment.customview.NoteAdapter;
+import vn.edu.hust.set.tung.rikkei_assignment.custom.ItemDecorationAlbumColumns;
+import vn.edu.hust.set.tung.rikkei_assignment.custom.RecyclerItemClickListener;
+import vn.edu.hust.set.tung.rikkei_assignment.custom.NoteAdapter;
 import vn.edu.hust.set.tung.rikkei_assignment.db.DBC;
 import vn.edu.hust.set.tung.rikkei_assignment.util.Echo;
 

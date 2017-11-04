@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.CAMERA"></uses-permission>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
 
     <application
         android:allowBackup="true"
@@ -20,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.ChangeNoteActivity"></activity>
+        <receiver android:name=".custom.AlarmReceiver"/>
     </application>
 
 </manifest>

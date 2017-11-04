@@ -1,6 +1,8 @@
 package vn.edu.hust.set.tung.rikkei_assignment.activity;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -40,16 +42,17 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import vn.edu.hust.set.tung.rikkei_assignment.R;
-import vn.edu.hust.set.tung.rikkei_assignment.customview.ChooseColorDialog;
-import vn.edu.hust.set.tung.rikkei_assignment.customview.ChooseDateDialog;
-import vn.edu.hust.set.tung.rikkei_assignment.customview.ChooseHourDialog;
-import vn.edu.hust.set.tung.rikkei_assignment.customview.ImageAdapter;
-import vn.edu.hust.set.tung.rikkei_assignment.customview.ItemDecorationAlbumColumns;
-import vn.edu.hust.set.tung.rikkei_assignment.customview.OnColorClicked;
-import vn.edu.hust.set.tung.rikkei_assignment.customview.OnImageRemove;
-import vn.edu.hust.set.tung.rikkei_assignment.customview.OnPhotoListener;
-import vn.edu.hust.set.tung.rikkei_assignment.customview.OnPickTimeOK;
-import vn.edu.hust.set.tung.rikkei_assignment.customview.PhotoDialog;
+import vn.edu.hust.set.tung.rikkei_assignment.custom.AlarmReceiver;
+import vn.edu.hust.set.tung.rikkei_assignment.custom.ChooseColorDialog;
+import vn.edu.hust.set.tung.rikkei_assignment.custom.ChooseDateDialog;
+import vn.edu.hust.set.tung.rikkei_assignment.custom.ChooseHourDialog;
+import vn.edu.hust.set.tung.rikkei_assignment.custom.ImageAdapter;
+import vn.edu.hust.set.tung.rikkei_assignment.custom.ItemDecorationAlbumColumns;
+import vn.edu.hust.set.tung.rikkei_assignment.custom.OnColorClicked;
+import vn.edu.hust.set.tung.rikkei_assignment.custom.OnImageRemove;
+import vn.edu.hust.set.tung.rikkei_assignment.custom.OnPhotoListener;
+import vn.edu.hust.set.tung.rikkei_assignment.custom.OnPickTimeOK;
+import vn.edu.hust.set.tung.rikkei_assignment.custom.PhotoDialog;
 import vn.edu.hust.set.tung.rikkei_assignment.db.DBC;
 import vn.edu.hust.set.tung.rikkei_assignment.model.Image;
 import vn.edu.hust.set.tung.rikkei_assignment.model.Note;
@@ -523,8 +526,21 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
 
     public void addAlarm(Note note) {
         if (isAlarm) {
+            Echo.echo("is alarm");
             note.setTimeRemind(remindHour + " " + remindMinute + " " + remindDay + " " + remindMonth + " " + remindYear);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            Intent myIntent = new Intent(ChangeNoteActivity.this, AlarmReceiver.class);
+            PendingIntent  pendingIntent = PendingIntent.getBroadcast(ChangeNoteActivity.this, 0, myIntent, 0);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, remindHour);
+            calendar.set(Calendar.MINUTE, remindMinute);
+            calendar.set(Calendar.DAY_OF_MONTH, remindDay);
+            calendar.set(Calendar.MONTH, remindMonth);
+            calendar.set(Calendar.YEAR, remindYear);
+            calendar.set(Calendar.SECOND, 0);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         } else {
+            Echo.echo("is not alarm");
             note.setTimeRemind("");
         }
     }

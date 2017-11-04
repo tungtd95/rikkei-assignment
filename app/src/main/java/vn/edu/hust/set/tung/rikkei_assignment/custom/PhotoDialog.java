@@ -1,9 +1,7 @@
-package vn.edu.hust.set.tung.rikkei_assignment.customview;
+package vn.edu.hust.set.tung.rikkei_assignment.custom;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.LinearLayout;
 
