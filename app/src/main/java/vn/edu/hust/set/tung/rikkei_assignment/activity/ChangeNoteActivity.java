@@ -1,13 +1,16 @@
 package vn.edu.hust.set.tung.rikkei_assignment.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -61,8 +64,8 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
     public static final String KEY_DIR = "/TungvdNote/";
     public static final int KEY_CAMERA = 321;
     public static final int KEY_PERMISSION_CAMERA = 1;
+    public static final int KEY_CHOOSE_IMAGE = 123;
     public static final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + KEY_DIR;
-    public static final String KEY_LAST_INDEX = "last index";
 
     EditText etTitle;
     EditText etContent;
@@ -152,7 +155,7 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
 
         tvPickHour.setText(remindHour + ":" + remindMinute);
         tvPickDate.setText(remindDay + "/" + remindMonth + "/" + remindYear);
-        
+
         tvPickHour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -408,7 +411,10 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
 
     @Override
     public void onChoosePhoto() {
-        Echo.echo("choosing photo");
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), KEY_CHOOSE_IMAGE);
     }
 
     @Override
@@ -419,6 +425,31 @@ public class ChangeNoteActivity extends AppCompatActivity implements OnColorClic
             imageAdapter.notifyDataSetChanged();
             isChange = true;
         }
+
+        if (requestCode == KEY_CHOOSE_IMAGE && resultCode == RESULT_OK) {
+            String path = getRealPathFromURI_API19(this, data.getData());
+            Echo.echo(path);
+            listImage.add(new Image(path));
+            imageAdapter.setListImage(listImage);
+            imageAdapter.notifyDataSetChanged();
+            isChange = true;
+        }
+    }
+
+    public static String getRealPathFromURI_API19(Context context, Uri uri){
+        String filePath = "";
+        String wholeID = DocumentsContract.getDocumentId(uri);
+        String id = wholeID.split(":")[1];
+        String[] column = { MediaStore.Images.Media.DATA };
+        String sel = MediaStore.Images.Media._ID + "=?";
+        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                column, sel, new String[]{ id }, null);
+        int columnIndex = cursor.getColumnIndex(column[0]);
+        if (cursor.moveToFirst()) {
+            filePath = cursor.getString(columnIndex);
+        }
+        cursor.close();
+        return filePath;
     }
 
     @Override
